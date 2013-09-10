@@ -1,0 +1,67 @@
+<div style="position:relative;width:100%;top:80px;overflow:auto;height:775px">
+  <div class="form-horizontal well" style="width:80%;margin:0 auto;overflow:none">
+    <button class="btn btn-primary btn-small" ng-click="toggleCrit()"> 
+      <a ng-class="arrow">
+      </a>
+    </button>
+    </br>
+    <div collapse="isCollapsed">
+      <div class="control-group">
+        <label class="control-label" for="title"> Title:
+        </label>
+        <div class="controls">
+          <input type='text' id='title' name='title' ng-model='form.title' style='width:90%' ui-keypress="{13:'keypress($event)'}" autofocus>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="neededby"> Added Between:
+        </label>
+        <div class="controls">
+          <table>
+          <tr>
+          <td>
+          <input style="width:90px" type="text" datepicker-popup="MM/dd/yyyy" ng-model="form.addedstart" open="openedstart" min="minDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)"/>
+          <button class="btn" ng-click="openstart()"><i class="icon-calendar"></i></button> 
+          </td>
+          <td style="padding-left:10px;padding-right:10px;vertical-align:bottom">
+          <label>And</label>
+          </td>
+          <td>
+          <input style="width:90px" type="text" datepicker-popup="MM/dd/yyyy" ng-model="form.addedend" open="openedend" min="minDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)"/>
+          <button class="btn" ng-click="openend()"><i class="icon-calendar"></i></button> 
+          </td>
+          </tr>
+          </table>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="user"> User:
+        </label>
+        <div class="controls">
+          <select ng-model="form.addeduser" ng-options="user for user in users">
+          </select>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="detail"> Conversation Detail:
+        </label>
+        <div class="controls">
+          <input type='text' id='detail' name='detail' ng-model='form.detail' style='width:90%'>
+        </div>
+      </div>
+      <div style="margin:10px">
+        <button class="btn btn-primary btn-small" id="search" type="button" ng-click="search()"> Search
+        </button>
+        &nbsp;&nbsp;
+        <button class="btn btn-primary btn-small" id="reset" type="button" ng-click="reset()"> Reset
+        </button>
+      </div>
+    </div>
+    <div>
+      <div
+        <div ng-grid="gridOptions" ng-class="tableClass">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,36 @@
+<div style="position:fixed;width:100%;top:200px">
+  <form class="row" ng-submit='submitLogin()'>
+    <div class="well" style="width:340px;margin:0 auto">
+      <div style="padding-left:10px">
+        <p>
+          <label for='username'> User Name:
+          </label>
+          <input type='text' style='width:300px' ng-model='form.username' ng-click='clearMessage()' id='username' autofocus="autofocus">
+        </p>
+        <p>
+          <label for='password'> Password:
+          </label>
+          <input type='password' style='width:300px' ng-model='form.password' ng-click='clearMessage()' id='password'>
+        </p>
+        <p>
+          <table style="width:100%">
+            <tr>
+              <td style="width:30%">
+                <button class="btn btn-primary" type='submit'> Sign In
+                </button>
+              </td>
+              <td style="width:70%">
+                <a href='/resetpassword' style="margin-left:10px"> Click here to reset your password</a>
+                <a href='/register' style="margin-left:10px"> Click here to register</a>          
+              </td>
+            </tr>
+          </table>
+        </p>
+        <p>
+          <span style="font-size:10pt;margin: 0 auto"> {{message}}
+          </span>
+        </p>
+      </div>
+    </div>
+  </form>
+</div>

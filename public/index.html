@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+	<title>chata</title>
+  <link rel='stylesheet' href='/stylesheets/bootstrap.min.css'/>
+  <link rel='stylesheet' href='/stylesheets/style.css'/>
+  <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Luckiest+Guy' type='text/css'/>
+  <link rel='stylesheet' href='/stylesheets/ng-grid.min.css'/>
+</head>
+<body>
+	<div class="navbar navbar-fixed-top">
+  	<div class="navbar-inner">
+    	<div class="container">
+      	<ul class="nav pull-left" style="padding-top:8px">
+       		<li>
+          	<a style="color:white;font-family: 'Luckiest Guy', cursive;font-size:28px;color:#90c5b9" href='/'> chata
+          	</a>
+        	<li>
+          	<div class="navbar-search pull-left" action='/searchChatSession' method='get' enctype='multipart/form-data' ng-show="loggedIn">
+            	<input class="search-query span3" ng-model='title' type="text" placeholder="Search By Chat Session" ui-keypress="{13:'keypress($event)'}" optional>
+            </div>
+          </li>
+        	<li style="padding-left:5px;">
+          	<a ng-show="loggedIn" href="/searchChatSession"> Search
+          	</a>
+          </li>
+        	<li>
+          	<a ng-show="loggedIn" href="/addChatSession"> Add Chat Session
+          	</a>
+          </li>
+        	<li class="dropdown" ng-show="loggedInAdmin">
+          	<a class="dropdown-toggle"> Admin
+            	<b class="caret">
+            	</b>
+            </a>
+          	<ul class="dropdown-menu">
+            	<li>
+              	<a href="/accountMgmt"> Account Management
+              	</a>
+              </li>
+            </ul>
+          </li>
+      </ul>
+      <ul class="nav pull-right" style="padding-top:8px;">
+        <li>
+          <a ng-show="loggedIn" href="/"> {{welcome}} Sign Out
+         	</a>
+        </li>
+      </ul>
+      </div>
+    </div>
+  </div>
+	<div class="container" style="width:100%" ng-view>
+	</div>
+  <div modal="shouldBeOpen" close="close()" options="opts">
+  <form ng-submit='submitLogin()'>
+    <div class="modal-header">
+      <h3> Your session has timed out, please login to extend it.
+      </h3>
+    </div>
+    <div class="modal-body">
+      <p>
+        <label for='username'> User Name:
+        </label>
+        <input type='text' ng-model='form.username' id='username' autofocus="autofocus">
+      </p>
+      <p>
+        <label for='password'> Password:
+        </label>
+        <input type='password' ng-model='form.password' id='password'>
+      </p>
+    </div>
+    <div class="modal-footer">
+      <p>
+        <table>
+          <tr>
+            <td>
+              <button class="btn btn-primary" type='submit' id='submit'> Sign In
+              </button>
+            </td>
+            <td>
+              <button class="btn" type='button' ng-click='close()'> Cancel
+              </button>
+            </td>
+            <td>
+              <span> {{message}}
+              </span>
+            </td>
+          </tr>
+        </table>
+      </p>
+    </div>
+  </form>
+</div>
+	<footer id="footer" style="height:50px;position:fixed;bottom:0;left:0;right:0;z-index:1000;background-color:#323232">
+  	<table style="width:100%;margin-top:10px">
+    	<tr>
+      	<td style="text-align:center;vertical-align:middle;">
+        	<div id="divfooter1"> &copy; NodeJS ATL :)
+        	</div>
+        </td>
+      	<td style="text-align:center;vertical-align:middle;">
+        	<table style="width:100%;margin:auto">
+          	<tr>
+            	<td>
+              	<div id="divfooter2"> Best viewed with
+              	</div>
+              </td>
+            	<td>
+              	<div id="divfooter3">
+              	</div>
+              </td>
+            </tr>
+          </table>
+        </td>
+      	<td style="text-align:center;vertical-align:middle;">
+        	<div id="divfooter4"> About Our Company
+        	</div>
+        </td>
+      </tr>
+    </table>
+  </footer>
+</body>
+<script src='/socket.io/socket.io.js'></script>
+<script src='/javascripts/lib/jquery-2.0.2.min.js'></script>
+<script src='/javascripts/lib/bootstrap.min.js'></script>
+<script src='/javascripts/lib/angular.min.js'></script>
+<script src='/javascripts/lib/md5-service.js'></script>
+<script src='/javascripts/lib/ng-grid-layout.js'></script>
+<script src='/javascripts/lib/ng-grid-2.0.6.min.js'></script>
+<script src='/javascripts/lib/ui-bootstrap-tpls-0.5.0.min.js'></script>
+<script src='/javascripts/lib/ui-utils.min.js'></script>
+<script src='/javascripts/lib/moment.min.js'></script>
+<script src='/javascripts/lib/socket.js'></script>
+<script src='/javascripts/app.js'></script>
+<script src='/javascripts/services.js'></script>
+<script src='/javascripts/controllers/common.js'></script>
+<script src='/javascripts/controllers/accountMgmt.js'></script>
+<script src='/javascripts/controllers/addChatSession.js'></script>
+<script src='/javascripts/controllers/editChatSession.js'></script>
+<script src='/javascripts/controllers/addAccount.js'></script>
+<script src='/javascripts/controllers/editAccount.js'></script>
+<script src='/javascripts/controllers/index.js'></script>
+<script src='/javascripts/controllers/resetpassword.js'></script>
+<script src='/javascripts/controllers/setpassword.js'></script>
+<script src='/javascripts/controllers/searchChatSession.js'></script>
+<script src='/javascripts/controllers/conversation.js'></script>
+<script src='/javascripts/controllers/register.js'></script>
+<script src='/javascripts/filters.js'></script>
+<script src='/javascripts/directives.js'></script>
+</html>

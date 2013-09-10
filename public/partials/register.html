@@ -1,0 +1,48 @@
+<form name="myform" novalidate style="position:relative;width:100%;top:80px;overflow:auto;height:490px">
+  <div class="form-horizontal well" style="width:500px;margin:0 auto;padding-bottom:5px !important">
+    <h4> Register
+    </h4>
+    <hr/>
+    <div class="control-group">
+      <label class="control-label" for='name-tf'> Name
+      </label>
+      <div class="controls">
+        <input class="input" size="200" type='text' ng-model='form.name' placeholder="John Doe" required autofocus>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for='email-tf'> Email
+      </label>
+      <div class="controls">
+        <input class="input" type='email' ng-model='form.email' placeholder="jdoe@yahoo.com"required>
+      </div>
+    </div>
+    <hr/>
+    <div class="control-group">
+      <label class="control-label" for='user-tf'> Username
+      </label>
+      <div class="controls">
+        <input class="input disabled" type='text' ng-model="form.username" placeholder="jdoe" required>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for='pass-tf'> Password
+      </label>
+      <div class="controls">
+        <input class="input" type='password' ng-model="form.password" required>
+      </div>
+    </div>
+    <div class="control-group">    
+      <p class="pull-right">
+        <button class="btn btn-primary" type='submit' ng-disabled="myform.$invalid || myform.$pristine" ng-click='submitAccount()'> Register
+        </button>
+        &nbsp;&nbsp;
+        <button class="btn btn-primary" type='button' ng-click='cancel()'> Cancel
+        </button>
+        <br/>        
+        <span style="color:red">
+        </span>
+      </p>
+    </div>
+  </div>
+</form>

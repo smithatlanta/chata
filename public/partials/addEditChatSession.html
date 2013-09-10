@@ -1,0 +1,21 @@
+<form novalidate name="myform" style="position:relative;width:100%;top:80px;overflow:auto;height:630px">
+  <div class="form-horizontal well" style="width:80%;margin:0 auto;overflow:hidden !important">
+    <input type='hidden' name='id' ng-model='form._id'>
+    <div class="control-group">
+      <label class="control-label" for="title"> Title:
+      </label>
+      <div class="controls">
+        <input type="text"  ng-model="form.title" style="width:90%" autofocus required>
+      </div>
+    </div>
+    <div class="control-group" style="margin-bottom:0px !important">    
+      <p class="pull-right">
+        <button class="btn btn-primary btn-small" ng-disabled="myform.$invalid || myform.$pristine" ng-click='submitChatSession()'> {{type}}
+        </button>
+        &nbsp;&nbsp;
+        <button class="btn btn-primary btn-small" ng-click='cancel()'> Cancel
+        </button>
+      </p>
+    </div>
+  </div>
+</form>
