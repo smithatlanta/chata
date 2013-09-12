@@ -1,4 +1,4 @@
-function IndexCtrl($scope, $http, $location, $rootScope, $routeParams, restService) {
+function IndexCtrl($scope, $location, $rootScope, restService) {
   if(localStorage.password){
     localStorage.removeItem("password");
   }
@@ -10,6 +10,9 @@ function IndexCtrl($scope, $http, $location, $rootScope, $routeParams, restServi
   }
   if(localStorage.email){
     localStorage.removeItem("email");
+  }
+  if(localStorage.id){
+    localStorage.removeItem("id");
   }
 
   if(localStorage.username){
@@ -34,19 +37,15 @@ function IndexCtrl($scope, $http, $location, $rootScope, $routeParams, restServi
     localStorage.username = $scope.form.username;
     localStorage.password = $scope.form.password;
 
-    restService.post('/signin', $scope.form).then(function(data, status, headers, config){
+    restService.post('/signin', $scope.form).then(function(data){
         localStorage.username = data.username;
         localStorage.password = data.password;
         localStorage.session = data.session;
         localStorage.name = data.name;
         localStorage.email = data.email;
-        if(localStorage.location){
-          $location.url(localStorage.location);
-        }
-        else{
-         $location.url('/addChatSession');
-        }
-      }, function(data, status, headers, config){
+        localStorage.id = data.id;
+        $location.url('addChatSession/');
+      }, function(status){
         localStorage.clear();
         $scope.message = "Incorrect username or password. Please try again.";
       });
@@ -54,5 +53,5 @@ function IndexCtrl($scope, $http, $location, $rootScope, $routeParams, restServi
     $scope.clearMessage = function(){
       $scope.message = "";
     };
-  }
+  };
 }

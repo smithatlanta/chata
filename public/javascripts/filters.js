@@ -11,6 +11,6 @@ angular.module('myApp.filters', []).
 				return "";
 			}
 			
-			return moment(dateString).format(format);		
+			return moment(dateString).format(format);
 		};
 	});

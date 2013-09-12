@@ -28,15 +28,19 @@
           	<a ng-show="loggedIn" href="/addChatSession"> Add Chat Session
           	</a>
           </li>
-        	<li class="dropdown" ng-show="loggedInAdmin">
-          	<a class="dropdown-toggle"> Admin
-            	<b class="caret">
-            	</b>
+          <li class="dropdown" ng-show="loggedIn">
+            <a class="dropdown-toggle"> Admin
+              <b class="caret">
+              </b>
             </a>
-          	<ul class="dropdown-menu">
-            	<li>
-              	<a href="/accountMgmt"> Account Management
-              	</a>
+            <ul class="dropdown-menu">
+              <li ng-show="loggedInAdmin">
+                <a href="/accountMgmt"> Accounts Management
+                </a>
+              </li>
+              <li>
+                <a href="/editAccount/{{id}}"> Manage My Account
+                </a>
               </li>
             </ul>
           </li>
@@ -145,7 +149,6 @@
 <script src='/javascripts/controllers/setpassword.js'></script>
 <script src='/javascripts/controllers/searchChatSession.js'></script>
 <script src='/javascripts/controllers/conversation.js'></script>
-<script src='/javascripts/controllers/register.js'></script>
 <script src='/javascripts/filters.js'></script>
 <script src='/javascripts/directives.js'></script>
 </html>

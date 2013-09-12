@@ -1,6 +1,6 @@
 app = module.parent.exports.app;
 var baseController = require('../controllers/base');
-var siteController = require('../controllers/site');
+var chatController = require('../controllers/chat');
 var accountController = require('../controllers/account');
 
 /* Middleware authentication */
@@ -36,13 +36,8 @@ if (config.EnvConfig.environment === "prod")
     });
 }
 
-app.get('/', siteController.index);
+app.get('/', chatController.index);
 app.post('/signin', accountController.authenticate);
-
-//ACCOUNT
-
-app.get('/auth', accountController.authenticate);
-
 app.post('/account', accountController.addAccount);
 app.put('/account', authenticate, accountController.updateAccount);
 app.del('/account/:id', authenticate, accountController.deleteAccount);
@@ -52,13 +47,13 @@ app.get('/accounts/short', authenticate, accountController.getAccountsShort);
 app.post('/account/resetpassword', accountController.resetPassword);
 app.post('/account/setpassword', accountController.setPassword);
 
-app.post('/search', authenticate, siteController.searchChatSessions);
+app.post('/chatsession', authenticate, chatController.addChatSession);
+app.put('/chatsession', authenticate, chatController.updateChatSession);
+app.del('/chatsession/:id', authenticate, chatController.deleteChatSession);
+app.get('/chatsessions', authenticate, chatController.getChatSessions);
+app.get('/chatsession/:id', authenticate, chatController.getChatSession);
+app.post('/chatsession/conversation', authenticate, chatController.addConversation);
+app.post('/chatsession/search', authenticate, chatController.searchChatSessions);
 
-app.post('/chatsession', authenticate, siteController.addChatSession);
-app.put('/chatsession', authenticate, siteController.updateChatSession);
-app.del('/chatsession/:id', authenticate, siteController.deleteChatSession);
-app.get('/chatsessions', authenticate, siteController.getChatSessions);
-app.get('/chatsession/:id', authenticate, siteController.getChatSession);
-app.post('/chatsession/conversation', authenticate, siteController.addConversation);
 // redirect all others to the index (HTML5 history)
-app.get('*', siteController.index);
+app.get('*', chatController.index);

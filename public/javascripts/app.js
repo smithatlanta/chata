@@ -33,16 +33,11 @@ angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.directives', 
         templateUrl: '/partials/addEditAccount.html',
         controller: EditAccountCtrl
       }).
-      when('/resetpassword', {
+      when('/resetPassword', {
         templateUrl: '/partials/resetPassword.html',
         controller: ResetPasswordCtrl
       }).
-      when('/register', {
-        templateUrl: '/partials/register.html',
-        controller: RegisterCtrl
-      }).
-
-      when('/setpassword', {
+      when('/setPassword', {
         templateUrl: '/partials/setPassword.html',
         controller: SetPasswordCtrl
       }).

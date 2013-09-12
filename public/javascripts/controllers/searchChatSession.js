@@ -1,22 +1,9 @@
-function SearchChatSessionCtrl($scope, $http, $location, $routeParams, $dialog, $rootScope, typesService, networksService, statesService, restService, authService, $timeout) {
-  localStorage.location = $location.url();
-  setupLogin($scope, $http);
+function SearchChatSessionCtrl($scope, $location, $routeParams, $dialog, $rootScope, restService) {
+  setupLogin($scope, restService);
   setupSearch($rootScope, $location);
-
-  /* authenticate */
-  authService.checkCreds().then(function(data, status, headers, config){
-      $rootScope.welcome = "Welcome: " + localStorage.name + " |" ;
-      $rootScope.loggedInAdmin = data.show;
-      $rootScope.loggedIn = true;
-    }, function(data, status, headers, config){
-      $rootScope.loggedInAdmin = false;
-      $rootScope.loggedIn = false;
-    })
+  checkCredentials($rootScope, restService);
 
   $scope.form = {};
-  $scope.types = typesService.getTypes();
-  $scope.networks = networksService.getNetworks();
-  $scope.states = statesService.getStates();
   $scope.tableClass = 'expanded_table';
   $scope.arrow = "icon-white icon-arrow-down";
 
@@ -28,16 +15,17 @@ function SearchChatSessionCtrl($scope, $http, $location, $routeParams, $dialog, 
     'starting-day': 1
   };
 
-  restService.gets('/accounts/short').then(function(data, status, headers, config){
+  restService.gets('/accounts/short').then(function(data){
       $scope.users = data;
-    }, function(err){
+    }, function(status){
       processError(status, $scope, $http);
     });
 
   var layoutPlugin = new ngGridLayoutPlugin();
-
-  $scope.form.title = $routeParams.title;
-  search($scope, $http, restService, layoutPlugin);
+  if($routeParams.title !== undefined){
+    $scope.form.title = $routeParams.title;
+    search($scope, restService, layoutPlugin);
+  }
 
   $scope.gridOptions = { data : 'myData',
     showGroupPanel: true,
@@ -70,17 +58,17 @@ function SearchChatSessionCtrl($scope, $http, $location, $routeParams, $dialog, 
 
   $scope.deleteChatSession = function(id){
     var title = 'Delete ChatSession';
-    var msg = 'Are you sure you want to delete this review?';
+    var msg = 'Are you sure you want to delete this session?';
     var btns = [{result:'no', label: 'No'}, {result:'yes', label: 'Yes', cssClass: 'btn-primary'}];
 
     $dialog.messageBox(title, msg, btns)
       .open()
       .then(function(result){
         if(result === 'yes'){
-          restService.delete('/chatsession', id).then(function(data, status, headers, config){
-              search($scope, $http, restService, layoutPlugin);
-            }, function(err){
-              processError(err, $scope, $http);
+          restService.delete('/chatsession', id).then(function(data){
+              search($scope, restService, layoutPlugin);
+            }, function(status){
+              processError(status, $scope, $http);
             });
         }
       });
@@ -97,11 +85,11 @@ function SearchChatSessionCtrl($scope, $http, $location, $routeParams, $dialog, 
   };
 
   $scope.search = function(){
-    search($scope, $http, restService, layoutPlugin);
+    search($scope, restService, layoutPlugin);
   };
 
   $scope.keypress = function(key){
-    search($scope, $http, restService, layoutPlugin);
+    search($scope, restService, layoutPlugin);
   };
 
   $scope.openstart = function() {
@@ -119,12 +107,9 @@ function SearchChatSessionCtrl($scope, $http, $location, $routeParams, $dialog, 
       $scope.openedneeded = true;
     });
   };
-
-
-
 }
 
-function search(scope, http, restService, layoutPlugin){
+function search(scope, restService, layoutPlugin){
   scope.myData = [];
 
   if(scope.form.neededbydate !== null){
@@ -134,11 +119,11 @@ function search(scope, http, restService, layoutPlugin){
     delete scope.form.neededbydate;
   }
 
-  restService.post('/search', JSON.stringify(scope.form)).then(function(data, status, headers, config){
+  restService.post('/chatsession/search', JSON.stringify(scope.form)).then(function(data){
       scope.myData = data;
       layoutPlugin.updateGridLayout();
-    }, function(err){
-      processError(err, scope, http);
+    }, function(status){
+      processError(scope, status);
     });
 }
 

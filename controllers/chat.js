@@ -1,14 +1,14 @@
-var siteProvider = require('../models/siteProvider').siteProvider;
-var siteProvider = new siteProvider();
+var chatProvider = require('../models/chatProvider').chatProvider;
+var chatProvider = new chatProvider();
 var moment = require('moment');
-var global = require('../app/global')
+var global = require('../app/global');
 
 config = require('../config/config');
 
 global.io.sockets.on('connection', function (socket) {
   socket.on('addConversation', function(data){
-    siteProvider.addConversation(data, function(conver){
-      conver.id = data.id;
+    chatProvider.addConversation(data.chatid, data, function(chat, conver){
+      conver.chatid = chat._id;
       global.io.sockets.emit('refreshConversation', conver);
     });
   });
@@ -19,7 +19,7 @@ exports.index = function(req, res){
 };
 
 exports.searchChatSessions =  function(req, res){
-	siteProvider.searchChatSessions(req.body, function(docs){
+	chatProvider.searchChatSessions(req.body, function(docs){
 		var out = [];
 		if(docs === undefined){
 			res.json(out);
@@ -43,13 +43,13 @@ exports.searchChatSessions =  function(req, res){
 };
 
 exports.getChatSession = function(req, res){
-	siteProvider.getChatSession(req.params.id, function(doc){
+	chatProvider.getChatSession(req.params.id, function(doc){
 		res.json(doc);
 	});
 };
 
 exports.getChatSessions = function(req, res){
-	siteProvider.getChatSessions(function(docs){
+	chatProvider.getChatSessions(function(docs){
 		var out = [];
 		if(docs === undefined){
 			res.json(out);
@@ -64,32 +64,32 @@ exports.getChatSessions = function(req, res){
 			chatsession.addeduser = docs[x].addeduser;
 			chatsession.id = docs[x]._id;
 
-			out.push(review);
+			out.push(chatsession);
 		}
 		res.json(out);
 	});
 };
 
 exports.addChatSession = function(req, res){
-	siteProvider.addChatSession(req.body, function(doc){
+	chatProvider.addChatSession(req.body, function(doc){
 		res.send(doc);
 	});
 };
 
 exports.updateChatSession = function(req, res){
-	siteProvider.updateChatSession(req.body, function(doc){
+	chatProvider.updateChatSession(req.body, function(doc){
 		res.json(doc);
 	});
 };
 
 exports.deleteChatSession = function(req, res){
-	siteProvider.deleteChatSession(req.params.id, function(success){
+	chatProvider.deleteChatSession(req.params.id, function(success){
 		res.json(success);
 	});
 }
 
 exports.addConversation = function(req, res){
-	siteProvider.addConversation(formPart.id, conver, function(doc){
-		res.send(doc);   	
+	chatProvider.addConversation(formPart.id, conver, function(doc){
+		res.send(doc);
 	});
 };

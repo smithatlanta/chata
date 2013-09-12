@@ -31,7 +31,7 @@ var EnvConfig = {
     localURL    : String,
     smtpHost    : String,
     smtpUser    : String,
-    smtpPassword    : String, 
+    smtpPassword    : String
 };
 
 EnvConfig.appName = 'chata';

@@ -1,17 +1,7 @@
-function EditChatSessionCtrl($scope, $http, $location, $routeParams, $rootScope, typesService, networksService, restService, authService, $timeout) {
-  localStorage.location = $location.url();
-  setupLogin($scope, $http);
+function EditChatSessionCtrl($scope, $location, $routeParams, $rootScope, restService) {
+  setupLogin($scope, restService);
   setupSearch($rootScope, $location);
-
-  /* authenticate */
-  authService.checkCreds().then(function(data, status, headers, config){
-      $rootScope.welcome = "Welcome: " + localStorage.name + " |" ;
-      $rootScope.loggedInAdmin = data.show;
-      $rootScope.loggedIn = true;
-    }, function(data, status, headers, config){
-      $rootScope.loggedInAdmin = false;
-      $rootScope.loggedIn = false;
-    })
+  checkCredentials($rootScope, restService);
 
   $scope.form = {};
   $scope.type = "Save";
@@ -32,17 +22,15 @@ function EditChatSessionCtrl($scope, $http, $location, $routeParams, $rootScope,
     });
   };
 
-  $scope.types = typesService.getTypes();
-  $scope.networks = networksService.getNetworks();
   $scope.isAdd = false;
 
-  restService.get('/chatsession', $routeParams.id).then(function(data, status, headers, config){
+  restService.get('/chatsession', $routeParams.id).then(function(data){
       data.neededbydate = data.neededbydatetime;
       $scope.form = data;
       var tmpDate = new Date(data.neededbydatetime);
       $scope.form.neededbytime = tmpDate;
-    }, function(err){
-      processError(err, $scope, $http);
+    }, function(status){
+      processError(status, $scope, $http);
     });
 
   $scope.submitChatSession = function () {
@@ -53,10 +41,10 @@ function EditChatSessionCtrl($scope, $http, $location, $routeParams, $rootScope,
 
     $scope.form.neededbydatetime = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate(), tm.getHours(), tm.getMinutes(), 0, 0);
 
-    restService.put('/chatsession', JSON.stringify($scope.form)).then(function(data, status, headers, config){
+    restService.put('/chatsession', JSON.stringify($scope.form)).then(function(data){
         $location.url('/searchChatSession?title=' + data.title);
-      }, function(err) {
-        processError(err, $scope, $http);
+      }, function(status) {
+        processError(status, $scope, $http);
     });
   };
 

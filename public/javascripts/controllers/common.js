@@ -1,4 +1,4 @@
-function processError(status, scope, http){
+function processError(scope, status){
 	if(status === 401){
 		scope.shouldBeOpen = true;
 	}
@@ -16,7 +16,7 @@ function setupSearch(rootScope, location){
   };
 }
 
-function setupLogin(scope, http){
+function setupLogin(scope, restService){
   scope.opts = {
     backdropFade: true,
     dialogFade:true
@@ -42,9 +42,7 @@ function setupLogin(scope, http){
     localStorage.username = scope.form.username;
     localStorage.password = scope.form.password;
 
-    http.defaults.headers.post = {'Authorization' : localStorage.username + ":" + localStorage.password};
-
-    http.post('/signin', scope.form).
+    restService.post('/signin', scope.form).
       success(function(data, status, headers, config) {
         localStorage.username = data.username;
         localStorage.password = data.password;
@@ -56,3 +54,18 @@ function setupLogin(scope, http){
       });
   };
 }
+
+function checkCredentials(rootScope, restService){
+  /* authenticate */
+  restService.post('/signin').then(function(data){
+      rootScope.welcome = "Welcome: " + localStorage.name + " |" ;
+      rootScope.loggedInAdmin = data.show;
+      rootScope.loggedIn = true;
+      rootScope.id = data.id;
+    }, function(status){
+      rootScope.loggedInAdmin = false;
+      rootScope.loggedIn = false;
+      processError(status, rootScope, http);
+    });
+}
+

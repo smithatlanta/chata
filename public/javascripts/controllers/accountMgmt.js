@@ -1,25 +1,14 @@
-function AccountMgmtCtrl($scope, $http, $location, $routeParams, $dialog, $rootScope, authService, restService) {
-  localStorage.location = $location.url();
-  /* setup session timeout popup to login */
-  setupLogin($scope, $http);
+function AccountMgmtCtrl($scope, $location, $dialog, $rootScope, restService) {
+  setupLogin($scope, restService);
   setupSearch($rootScope, $location);
-
-  /* authenticate */
-  authService.checkCreds().then(function(data, status, headers, config){
-      $rootScope.welcome = "Welcome: " + localStorage.name + " |" ;
-      $rootScope.loggedInAdmin = data.show;
-      $rootScope.loggedIn = true;
-    }, function(data, status, headers, config){
-      $rootScope.loggedInAdmin = false;
-      $rootScope.loggedIn = false;
-    });
+  checkCredentials($rootScope, restService);
 
   var layoutPlugin = new ngGridLayoutPlugin();
   $scope.gridOptions = { data : 'myData',
     showGroupPanel: false,
     enableCellSelection: false,
     enableRowSelection: false,
-    plugins: [ layoutPlugin ],    
+    plugins: [ layoutPlugin ],
     columnDefs: [
       {field: 'name', displayName: 'Name', width: '25%'},
       {field: 'username', displayName: 'Username', width: '15%'},
@@ -30,10 +19,10 @@ function AccountMgmtCtrl($scope, $http, $location, $routeParams, $dialog, $rootS
 
   $scope.myData = [];
 
-  restService.gets('/accounts').then(function(data, status, headers, config){
+  restService.gets('/accounts').then(function(data){
       $scope.myData = data;
       layoutPlugin.updateGridLayout();
-    }, function(data, status, headers, config){
+    }, function(status){
         processError(status, $scope, $http);
     });
 
@@ -51,16 +40,16 @@ function AccountMgmtCtrl($scope, $http, $location, $routeParams, $dialog, $rootS
       .open()
       .then(function(result){
         if(result === 'yes'){
-          restService.delete('/account', id).then(function(data, status, headers, config){
+          restService.delete('/account', id).then(function(data){
               $scope.myData = [];
 
-              restService.gets('/accounts').then(function(data, status, headers, config){
+              restService.gets('/accounts').then(function(data){
                   $scope.myData = data;
                   layoutPlugin.updateGridLayout();
-                }, function(data, status, headers, config){
+                }, function(status){
                     processError(status, $scope, $http);
                 });
-            }, function(data, status, headers, config){
+            }, function(status){
               processError(status, $scope, $http);
             });
         }

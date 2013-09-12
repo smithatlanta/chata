@@ -4,43 +4,12 @@ angular.module('myApp.directives', ['md5']).
       elm.text(version);
     };
   }]).
-  directive('fileSelect', function () {
-
-    return {
-      restrict: 'A',
-      template: '<input type="file" />',
-      replace: true,
-      link: function(scope, element, attrs) {        
-        element.bind('change', function(ev) {
-          if(ev.originalEvent !== undefined){
-            scope.$apply(function(){scope.file = ev.originalEvent.target.files[0]; });
-          }
-        });
-
-        scope.$watch('file', function(value){
-          if(value !== undefined){
-            if(value === null){
-              $(".fileupload").fileupload('clear')
-            }
-            else
-            {
-              if(value.size > 20971520){
-                scope.filestatus ="There is a file size limit of 20 megabytes. Please use the detail area to include local share information.";
-                $(".fileupload").fileupload('clear')   
-              }
-            }
-          }
-        }, true)
-      }
-    }
-  }).
-  // Resizing a div with AngularJS
+  // Resizing a div with AngularJS in a very rough way
   directive('resize', function ($window) {
     return function (scope, element) {
       scope.getWinHeight = function() {
         var heightDeduct;
 
-        // > 895
         if($window.innerWidth >= 885){
           scope.discussionTop = 'discuss114';
 
@@ -53,7 +22,6 @@ angular.module('myApp.directives', ['md5']).
           }
         }
 
-        // 
         if($window.innerWidth >= 744 && $window.innerWidth < 885){
           scope.discussionTop = 'discuss135';
           if(scope.isCollapsed === true){
@@ -65,7 +33,6 @@ angular.module('myApp.directives', ['md5']).
           }
         }
 
-        // 746
         if($window.innerWidth >=  590 && $window.innerWidth < 744){
           scope.discussionTop = 'discuss156';
           if(scope.isCollapsed === true){
@@ -103,11 +70,11 @@ angular.module('myApp.directives', ['md5']).
         
         setNavHeight($window.innerHeight - heightDeduct);
         return $window.innerHeight;
-      }
+      };
 
       var setNavHeight = function(newHeight) {
         element.css('height', newHeight + 'px');
-      }
+      };
 
       // Set on load
       scope.$watch(scope.getWinHeight, function (newValue, oldValue) {
@@ -133,7 +100,7 @@ angular.module('myApp.directives', ['md5']).
             // parse the size attribute
             var size = attrs.size;
             // default to 40 pixels if not set
-            if((size=== null) || (size == undefined) || (size == '')){
+            if((size=== null) || (size === undefined) || (size === '')){
                 size = 40;
             }
             // parse the ratings attribute
@@ -152,40 +119,40 @@ angular.module('myApp.directives', ['md5']).
             if(localStorage.lastemail !== attrs.email)
             {
               if(localStorage.bubbleside === "left"){
-                localStorage.bubbleside = "right"
+                localStorage.bubbleside = "right";
               }
               else
               {
-                localStorage.bubbleside = "left"
+                localStorage.bubbleside = "left";
               }
             }
 
             // first one is always on
             if(attrs.index === "0"){
-              localStorage.bubbleside = "left"
+              localStorage.bubbleside = "left";
               if(attrs.filename){
-                tag = '<table style="width:100%"><tr><td style="text-align:center"><span class="gravtext">' + attrs.added + '</span></td></tr></table><table style="width:100%"><tr><td><table style="width:100%"><tr><td class="gravatar center"><img class="gravatar-icon" src="https://secure.gravatar.com/avatar/' + hash + '?s=50&r=pg&d=mm"></img></td></tr><tr><td class="gravtext"><span>' + attrs.user +'</span></td></tr></table></td><td class="bubblerow"><div class="bubble me">' + attrs.detail + '<br/><a target="_self" href="/asset/' + attrs.id + '" >attachment</a></div></td></tr></table>'
+                tag = '<table style="width:100%"><tr><td style="text-align:center"><span class="gravtext">' + attrs.added + '</span></td></tr></table><table style="width:100%"><tr><td><table style="width:100%"><tr><td class="gravatar center"><img class="gravatar-icon" src="https://secure.gravatar.com/avatar/' + hash + '?s=50&r=pg&d=mm"></img></td></tr><tr><td class="gravtext"><span>' + attrs.user +'</span></td></tr></table></td><td class="bubblerow"><div class="bubble me">' + attrs.detail + '<br/><a target="_self" href="/asset/' + attrs.id + '" >attachment</a></div></td></tr></table>';
               }
               else{
-                tag = '<table style="width:100%"><tr><td style="text-align:center"><span class="gravtext">' + attrs.added + '</span></td></tr></table><table style="width:100%"><tr><td><table style="width:100%"><tr><td class="gravatar center"><img class="gravatar-icon" src="https://secure.gravatar.com/avatar/' + hash + '?s=50&r=pg&d=mm"></td></tr><tr><td class="gravtext"><span>' + attrs.user +'</span></td></tr></table></td><td class="bubblerow"><div class="bubble me">' + attrs.detail + '</div></td></tr></table>'
+                tag = '<table style="width:100%"><tr><td style="text-align:center"><span class="gravtext">' + attrs.added + '</span></td></tr></table><table style="width:100%"><tr><td><table style="width:100%"><tr><td class="gravatar center"><img class="gravatar-icon" src="https://secure.gravatar.com/avatar/' + hash + '?s=50&r=pg&d=mm"></td></tr><tr><td class="gravtext"><span>' + attrs.user +'</span></td></tr></table></td><td class="bubblerow"><div class="bubble me">' + attrs.detail + '</div></td></tr></table>';
               }
             }
             else{
               if(localStorage.bubbleside === "left"){
                 if(attrs.filename){
-                  tag = '<table style="width:100%"><tr><td style="text-align:center"><span class="gravtext">' + attrs.added + '</span></td></tr></table><table style="width:100%"><tr><td><table style="width:100%"><tr><td class="gravatar center"><img class="gravatar-icon" src="https://secure.gravatar.com/avatar/' + hash + '?s=50&r=pg&d=mm"></td></tr><tr><td class="gravtext"><span>' + attrs.user +'</span></td></tr></table></td><td class="bubblerow"><div class="bubble me">' + attrs.detail + '<br/><a target="_self" href="/asset/' + attrs.id + '" >attachment</a></div></td></tr></table>'
+                  tag = '<table style="width:100%"><tr><td style="text-align:center"><span class="gravtext">' + attrs.added + '</span></td></tr></table><table style="width:100%"><tr><td><table style="width:100%"><tr><td class="gravatar center"><img class="gravatar-icon" src="https://secure.gravatar.com/avatar/' + hash + '?s=50&r=pg&d=mm"></td></tr><tr><td class="gravtext"><span>' + attrs.user +'</span></td></tr></table></td><td class="bubblerow"><div class="bubble me">' + attrs.detail + '<br/><a target="_self" href="/asset/' + attrs.id + '" >attachment</a></div></td></tr></table>';
                 }
                 else{
-                  tag = '<table style="width:100%"><tr><td style="text-align:center"><span class="gravtext">' + attrs.added + '</span></td></tr></table><table style="width:100%"><tr><td><table style="width:100%"><tr><td class="gravatar center"><img class="gravatar-icon" src="https://secure.gravatar.com/avatar/' + hash + '?s=50&r=pg&d=mm"></td></tr><tr><td class="gravtext"><span>' + attrs.user +'</span></td></tr></table></td><td class="bubblerow"><div class="bubble me">' + attrs.detail + '</div></td></tr></table>'                  
+                  tag = '<table style="width:100%"><tr><td style="text-align:center"><span class="gravtext">' + attrs.added + '</span></td></tr></table><table style="width:100%"><tr><td><table style="width:100%"><tr><td class="gravatar center"><img class="gravatar-icon" src="https://secure.gravatar.com/avatar/' + hash + '?s=50&r=pg&d=mm"></td></tr><tr><td class="gravtext"><span>' + attrs.user +'</span></td></tr></table></td><td class="bubblerow"><div class="bubble me">' + attrs.detail + '</div></td></tr></table>';
                 }
               }
               else
               {
-                if(attrs.filename){                
-                  tag = '<table style="width:100%"><tr><td style="text-align:center"><span class="gravtext">' + attrs.added + '</span></td></tr></table><table style="width:100%"><tr><td class="bubblerow"><div class="bubble you">' + attrs.detail + '<br/><a target="_self" href="/asset/' + attrs.id + '" >attachment</a></div></td><td><table style="width:100%"><tr><td class="gravatar center"><img class="gravatar-icon" src="https://secure.gravatar.com/avatar/' + hash + '?s=50&r=pg&d=mm"></td></tr><tr><td class="gravtext"><span>' + attrs.user +'</span></td></tr></table></td></tr></table>'
+                if(attrs.filename){
+                  tag = '<table style="width:100%"><tr><td style="text-align:center"><span class="gravtext">' + attrs.added + '</span></td></tr></table><table style="width:100%"><tr><td class="bubblerow"><div class="bubble you">' + attrs.detail + '<br/><a target="_self" href="/asset/' + attrs.id + '" >attachment</a></div></td><td><table style="width:100%"><tr><td class="gravatar center"><img class="gravatar-icon" src="https://secure.gravatar.com/avatar/' + hash + '?s=50&r=pg&d=mm"></td></tr><tr><td class="gravtext"><span>' + attrs.user +'</span></td></tr></table></td></tr></table>';
                 }
                 else{
-                  tag = '<table style="width:100%"><tr><td style="text-align:center"><span class="gravtext">' + attrs.added + '</span></td></tr></table><table style="width:100%"><tr><td class="bubblerow"><div class="bubble you">' + attrs.detail + '</div></td><td><table style="width:100%"><tr><td class="gravatar center"><img class="gravatar-icon" src="https://secure.gravatar.com/avatar/' + hash + '?s=50&r=pg&d=mm"></td></tr><tr><td class="gravtext"><span>' + attrs.user +'</span></td></tr></table></td></tr></table>'                  
+                  tag = '<table style="width:100%"><tr><td style="text-align:center"><span class="gravtext">' + attrs.added + '</span></td></tr></table><table style="width:100%"><tr><td class="bubblerow"><div class="bubble you">' + attrs.detail + '</div></td><td><table style="width:100%"><tr><td class="gravatar center"><img class="gravatar-icon" src="https://secure.gravatar.com/avatar/' + hash + '?s=50&r=pg&d=mm"></td></tr><tr><td class="gravtext"><span>' + attrs.user +'</span></td></tr></table></td></tr></table>';
                 }
               }
             }
@@ -200,5 +167,3 @@ angular.module('myApp.directives', ['md5']).
         }
     };
   }]);
-
-

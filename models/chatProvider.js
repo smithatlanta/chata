@@ -7,7 +7,7 @@ var Conversation = new Schema({
 	detail: String,
 	added: Date,
 	user: String,
-	email: String,
+	email: String
 });
 
 var ChatSession = new Schema({
@@ -23,9 +23,9 @@ mongoose.model('ChatSession', ChatSession, 'chatsession');
 
 var ChatSession = mongoose.model('ChatSession');
 
-siteProvider = function(){};
+chatProvider = function(){};
 
-siteProvider.prototype.searchChatSessions = function(qry, callback){
+chatProvider.prototype.searchChatSessions = function(qry, callback){
 	var query = ChatSession.find({}).sort({title: 'asc'});
 
 	var hasQueryString = false;
@@ -63,13 +63,13 @@ siteProvider.prototype.searchChatSessions = function(qry, callback){
 	}
 
 	if(hasQueryString) {
-		query.exec(function(err, reviews){
+		query.exec(function(err, docs){
 			if (err) {
-	          console.log(err);
-	          throw err;
-	        }
+				console.log(err);
+				throw err;
+			}
 
-			callback(reviews);
+			callback(docs);
 		});
 	}
 	else{
@@ -78,29 +78,29 @@ siteProvider.prototype.searchChatSessions = function(qry, callback){
 };
 
 
-siteProvider.prototype.getChatSessions = function(callback){
-	ChatSession.find(function(err, reviews) {
-	  if (err) {
-	    console.log(err);
-	    throw err;
-	  }
+chatProvider.prototype.getChatSessions = function(callback){
+	ChatSession.find(function(err, docs) {
+		if (err) {
+			console.log(err);
+			throw err;
+		}
 
-		callback(reviews);
+		callback(docs);
 	});
 };
 
-siteProvider.prototype.getChatSession = function(id, callback){
-	ChatSession.findById(id, function(err, review) {
-    if (err) {
-      console.log(err);
-      throw err;
-    }
+chatProvider.prototype.getChatSession = function(id, callback){
+	ChatSession.findById(id, function(err, doc) {
+		if (err) {
+			console.log(err);
+			throw err;
+		}
 
-		callback(review);
+		callback(doc);
 	});
 };
 
-siteProvider.prototype.addChatSession = function(chatsession, callback){
+chatProvider.prototype.addChatSession = function(chatsession, callback){
 	var doc = new ChatSession();
 
 	doc.title = chatsession.title;
@@ -119,7 +119,7 @@ siteProvider.prototype.addChatSession = function(chatsession, callback){
 	callback(doc);
 };
 
-siteProvider.prototype.updateChatSession = function(chatsession, callback){
+chatProvider.prototype.updateChatSession = function(chatsession, callback){
 	ChatSession.findById(chatsession._id, function(err, doc) {
 		if (err) {
 			console.log(err);
@@ -128,7 +128,7 @@ siteProvider.prototype.updateChatSession = function(chatsession, callback){
 	
 		doc.title = chatsession.title;
 		doc.lastmodified = new Date();
-		doc.lastmodifieduser = chatsession.user		
+		doc.lastmodifieduser = chatsession.user;
 
 		doc.save(function(err) {
 			if (err) {
@@ -140,7 +140,7 @@ siteProvider.prototype.updateChatSession = function(chatsession, callback){
 	});
 };
 
-siteProvider.prototype.deleteChatSession = function(id, callback){
+chatProvider.prototype.deleteChatSession = function(id, callback){
 	ChatSession.remove({_id: id}, function(err) {
 		if (err) {
 			console.log(err);
@@ -150,34 +150,34 @@ siteProvider.prototype.deleteChatSession = function(id, callback){
 	callback("true");
 };
 
-siteProvider.prototype.getConversation = function(id, callback){
-	ChatSession.find({"conversations._id": id}, {'_id': 0, 'conversations.$':1}, function(err, conversation) {
+chatProvider.prototype.getConversation = function(id, callback){
+	ChatSession.find({"conversations._id": id}, {'_id': 0, 'conversations.$':1}, function(err, doc) {
     if (err) {
       console.log(err);
       throw err;
     }
 
-		callback(conversation);
-	});	
-}
+		callback(doc);
+	});
+};
 
-siteProvider.prototype.genConversationId = function(){
-	var _id = new mongoose.Types.ObjectId();
-	return _id;
-}
-
-
-siteProvider.prototype.addConversation = function(conver, callback){
-	ChatSession.findById(conver.id, function(err, doc) {
+chatProvider.prototype.addConversation = function(chatid, conver, callback){
+	ChatSession.findById(chatid, function(err, doc) {
 		if (err) {
 			console.log(err);
 			throw err;
 		}
 
 		doc.lastmodified = new Date();
-		doc.lastmodifieduser = conver.user
+		doc.lastmodifieduser = conver.user;
 
-		doc.conversations.push(conver);
+		var conversation = {};
+		conversation.detail = conver.detail;
+		conversation.added = doc.lastmodified;
+		conversation.user = conver.user;
+		conversation.email = conver.email;
+
+		doc.conversations.push(conversation);
 
 		doc.save(function(err, doc) {
 			if (err) {
@@ -185,10 +185,9 @@ siteProvider.prototype.addConversation = function(conver, callback){
 				throw err;
 			}
 			
-			callback(conver);
+			callback(doc, conversation);
 		});
 	});
-}
+};
 
-
-exports.siteProvider=siteProvider;
+exports.chatProvider=chatProvider;

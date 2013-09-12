@@ -1,38 +1,42 @@
-function EditAccountCtrl($scope, $http, $location, $routeParams, $rootScope, authService, restService) {
-  localStorage.location = $location.url();
-  setupLogin($scope, $http);
+function EditAccountCtrl($scope, $location, $routeParams, $rootScope, restService, md5) {
+  setupLogin($scope, restService);
   setupSearch($rootScope, $location);
+  checkCredentials($rootScope, restService);
 
-  /* authenticate */
-  authService.checkCreds().then(function(data, status, headers, config){
-      $rootScope.welcome = "Welcome: " + localStorage.name + " |" ;
-      $rootScope.loggedInAdmin = data.show;
-      $rootScope.loggedIn = true;
-    }, function(data, status, headers, config){
-      $rootScope.loggedInAdmin = false;
-      $rootScope.loggedIn = false;
-    })
+  $scope.hash = md5.createHash(localStorage.email.toLowerCase());
 
   $scope.form = {};
   $scope.header = "Edit Account";
   $scope.roles = ['user', 'admin'];
 
-  restService.get('/account', $routeParams.id).then(function(data, status, headers, config){
+  restService.get('/account', $routeParams.id).then(function(data){
       $scope.form = data;
       $scope.form.password = "";
-    }, function(err){
-      processError(err, $scope, $http);
+    }, function(status){
+      processError(status, $scope, $http);
     });
 
   $scope.submitAccount = function () {
-    restService.put('/account', $scope.form).then(function(data, status, headers, config){
-        $location.url('/accountMgmt');
-      }, function(err){
-        processError(err, $scope, $http);
+    restService.put('/account', $scope.form).then(function(data){
+        if($rootScope.loggedInAdmin){
+          $location.url('/accountMgmt');
+        }
+        else
+        {
+          $location.url('searchChatSession/');
+        }
+      }, function(status){
+        processError(status, $scope, $http);
       });
   };
 
   $scope.cancel = function () {
-    $location.url('/accountMgmt');
+    if($rootScope.loggedInAdmin){
+      $location.url('/accountMgmt');
+    }
+    else
+    {
+      $location.url('searchChatSession/');
+    }
   };
 }

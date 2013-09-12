@@ -1,9 +1,16 @@
-<form name="myform" novalidate style="position:relative;width:100%;top:80px;overflow:auto;height:490px">
+<form name="myform" novalidate style="position:relative;width:100%;top:80px;overflow:none;height:490px">
   <div class="form-horizontal well" style="width:500px;margin:0 auto;padding-bottom:5px !important">
     <h4> {{ header}}
     </h4>
     <hr/>
     <input type='hidden' ng-model='form._id'>
+    <div class="control-group">
+      <div class="controls">
+        <img alt="Image provided by Gravatar" src="https://secure.gravatar.com/avatar/{{hash}}?s=80&r=pg&d=mm">
+        <a href="http://en.gravatar.com" target="_blank">Click here to setup your avatar</a>
+        <label>*Please use the same email address as the one below when setting up your gravatar account.</label>
+      </div>      
+    </div>
     <div class="control-group">
       <label class="control-label" for='name-tf'> Name
       </label>
@@ -18,15 +25,14 @@
         <input class="input" type='email' ng-model='form.email' placeholder="jdoe@yahoo.com"required>
       </div>
     </div>
-    <div class="control-group">
+    <div class="control-group" ng-show="loggedInAdmin">
       <label class="control-label" for='role-list'> Role
       </label>
       <div class="controls">
-        <select ng-model="form.role" ng-options="c for c in roles" required>
+        <select ng-model="form.role" ng-options="c for c in roles">
         </select>
       </div>
     </div>
-    <hr/>
     <div class="control-group">
       <label class="control-label" for='user-tf'> Username
       </label>

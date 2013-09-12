@@ -3,33 +3,25 @@
     <div style="width:80%;margin:0 auto;">
       <table style="width:100%;cellpadding:0px">
         <tr>
-          <td style="text-align:left;vertical-align:top;width:5%;">
-            <button class="btn btn-primary btn-small" ng-click="toggleCrit()"> 
-              <a ng-class="arrow">
-              </a>
-            </button>
-          </td>
           <td style="text-align:left;vertical-align:top;width:75%">
             <h4 style="margin:0px"> {{title}}
             </h4>
           </td>
-          <td style="text-align:right;vertical-align:top;width:20%">
+          <td style="text-align:right;vertical-align:top;width:25%">
           </td>
         </tr>
       </table>
       <table style="width:100%;cellpadding:0px">
         <tr>
-          <td style="text-align:left;vertical-align:top;width:5%;">
-          </td>
           <td style="text-align:left;vertical-align:top;width:90%;">
             <ul style="display:inline-block;width:100%;margin:0px 0px 0px 0px">
-              <li style="margin:0px 15px 0px 0px;display:inline-block;"> Added: {{added | moment:'M/D/YYYY h:mm A'}}
+              <li style="margin:0px 15px 0px 0px;display:inline-block;"><b> Added:</b> {{added | moment:'M/D/YYYY h:mm A'}}
               </li>
-              <li style="margin:0px 15px 0px 0px;display:inline-block;"> Updated: {{lastmodified | moment:'M/D/YYYY h:mm A'}}
+              <li style="margin:0px 15px 0px 0px;display:inline-block;"><b> Updated:</b> {{lastmodified | moment:'M/D/YYYY h:mm A'}}
               </li>
             </ul>
           </td>
-          <td style="text-align:left;vertical-align:top;width:5%;">
+          <td style="text-align:left;vertical-align:top;width:10%;">
           </td>
         </tr>
       </table>

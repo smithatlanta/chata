@@ -1,46 +1,23 @@
-function ConversationCtrl($scope, $http, $location, $routeParams, $rootScope, restService, authService, socket, $anchorScroll) {
-  localStorage.location = $location.url();
-  setupLogin($scope, $http);
+function ConversationCtrl($scope, $location, $routeParams, $rootScope, restService, socket, $anchorScroll) {
+  setupLogin($scope, restService);
   setupSearch($rootScope, $location);
+  checkCredentials($rootScope, restService);
 
-  /* authenticate */
-  authService.checkCreds().then(function(data, status, headers, config){
-      $rootScope.welcome = "Welcome: " + localStorage.name + " |" ;
-      $rootScope.loggedInAdmin = data.show;
-      $rootScope.loggedIn = true;
-    }, function(data, status, headers, config){
-      $rootScope.loggedInAdmin = false;
-      $rootScope.loggedIn = false;
-    })
+  socket.addListener('refreshConversation', function(data){
+    if(data.chatid === $routeParams.id){
 
-  socket.addListener('refreshConversation', function(conver){
-    if(conver.id === $routeParams.id){
-
-      $scope.lastmodified = conver.added;
-      $scope.conversations.push(conver);
+      $scope.lastmodified = data.added;
+      $scope.conversations.push(data);
       $scope.form = {};
     }
-  })
+  });
   
-  $scope.arrow = "icon-white icon-arrow-down";
-  $scope.discussEntry = 'expanded_discuss';  
-  $scope.discussionTop = 'discuss114'
-  $scope.showProgress = false;  
-
-  $scope.toggleCrit = function(){
-    $scope.isCollapsed = !$scope.isCollapsed;
-    if($scope.isCollapsed === true){
-      $scope.discussEntry = 'collapsed_discuss';
-      $scope.arrow = "icon-white icon-arrow-up";
-    }
-    else{
-      $scope.discussEntry = 'expanded_discuss';
-      $scope.arrow = "icon-white icon-arrow-down";
-    }
-  };
+  $scope.discussEntry = 'expanded_discuss';
+  $scope.discussionTop = 'discuss114';
+  $scope.showProgress = false;
 
   $scope.addConversation = function () {
-    $scope.form.id = $routeParams.id;
+    $scope.form.chatid = $routeParams.id;
     $scope.form.email = localStorage.email;
     $scope.form.user = localStorage.username;
 
@@ -49,15 +26,13 @@ function ConversationCtrl($scope, $http, $location, $routeParams, $rootScope, re
   };
 
   $scope.getChatSession = function(){
-    restService.get('/chatsession', $routeParams.id).then(function(review){
-      $scope.title = review.title;
-      $scope.currentstate = review.currentstate;
-      $scope.added = review.added;
-      $scope.neededbydatetime = review.neededbydatetime;
-      $scope.lastmodified = review.lastmodified;      
-      $scope.conversations = review.conversations;
-    }, function(err){
-      console.log(err);
+    restService.get('/chatsession', $routeParams.id).then(function(data){
+      $scope.title = data.title;
+      $scope.added = data.added;
+      $scope.lastmodified = data.lastmodified;
+      $scope.conversations = data.conversations;
+    }, function(status){
+      processError(status, $scope, $http);
     });
-  }
+  };
 }

@@ -67,6 +67,7 @@ accountProvider.prototype.authenticate = function(username, password, unixoffset
                 user.session = nowplusone.valueOf();
                 user.name = doc.name;
                 user.email = doc.email;
+                user.id = doc._id;
                 if(doc.role === 'admin'){
                     user.show = true;
                 }
