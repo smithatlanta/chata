@@ -1,4 +1,4 @@
-function SetPasswordCtrl($scope, $http, $location, $dialog, $routeParams, $rootScope, authService) {
+function SetPasswordCtrl($scope, $location, $routeParams, authService) {
   $scope.submitUpdate = function(){
     if($scope.form.password === $scope.form.confirmpassword){
 			$scope.form.username = $routeParams.username;

@@ -1,4 +1,4 @@
-function ResetPasswordCtrl($scope, $http, $location, $dialog, $routeParams, $rootScope, authService) {
+function ResetPasswordCtrl($scope, $location, $dialog, authService) {
   $scope.submitReset = function(){
     authService.resetPassword($scope.form).then(function(){
       var title = 'Password Reset';
