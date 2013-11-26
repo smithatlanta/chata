@@ -1,7 +1,6 @@
-function AddChatSessionCtrl($scope, $location, $rootScope, restService) {
-  setupLogin($scope, restService);
-  setupSearch($rootScope, $location);
-  checkCredentials($rootScope, restService);
+function AddChatSessionCtrl($scope, $location, $rootScope, $http, socket, authService, restService) {
+  setupGlobalFunctions(socket, $rootScope, $location);
+  checkCredentials(authService, $rootScope, $http);
 
   $scope.form = {};
   $scope.type = "Add";

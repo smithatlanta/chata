@@ -1,20 +1,18 @@
-function ConversationCtrl($scope, $location, $routeParams, $rootScope, restService, socket, $anchorScroll) {
-  setupLogin($scope, restService);
-  setupSearch($rootScope, $location);
-  checkCredentials($rootScope, restService);
-
-  socket.addListener('refreshConversation', function(data){
-    if(data.chatid === $routeParams.id){
-
-      $scope.lastmodified = data.added;
-      $scope.conversations.push(data);
-      $scope.form = {};
-    }
-  });
+function ConversationCtrl($scope, $location, $routeParams, $rootScope, $http, authService, restService, socket, $anchorScroll) {
+  setupGlobalFunctions(socket, $rootScope, $location);
+  checkCredentials(authService, $rootScope, $http);
   
   $scope.discussEntry = 'expanded_discuss';
   $scope.discussionTop = 'discuss114';
   $scope.showProgress = false;
+
+  $rootScope.$on('refreshConversation', function(ev, msg){
+    if(msg.chatid === $routeParams.id){
+      $scope.lastmodified = msg.added;
+      $scope.conversations.push(msg);
+      $scope.form = {};
+    }
+  });
 
   $scope.addConversation = function () {
     $scope.form.chatid = $routeParams.id;

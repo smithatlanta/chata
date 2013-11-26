@@ -1,0 +1,22 @@
+{
+  "name": "Chata",
+  "version": "0.0.1",
+  "authors": [
+    "Michael Smith <smithatlanta@gmail.com>"
+  ],
+  "main": "public/javascripts/lib",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+      "angular": "1.0.8",
+      "bootstrap": "2.3.2",
+      "jquery": "1.9.1",
+      "jquery-migrate": "1.2.1",
+      "moment": "latest",
+      "ng-grid": "2.0.7",
+      "angular-ui-bootstrap-bower": "0.6.0",
+      "angular-ui-utils": "0.0.4",
+      "underscore": "latest",
+      "angular-socket-io": "0.2.0"
+  }
+}

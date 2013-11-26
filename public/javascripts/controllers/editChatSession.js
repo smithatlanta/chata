@@ -1,7 +1,6 @@
-function EditChatSessionCtrl($scope, $location, $routeParams, $rootScope, restService) {
-  setupLogin($scope, restService);
-  setupSearch($rootScope, $location);
-  checkCredentials($rootScope, restService);
+function EditChatSessionCtrl($scope, $location, $routeParams, $rootScope, $http, socket, authService, restService) {
+  setupGlobalFunctions(socket, $rootScope, $location);
+  checkCredentials(authService, $rootScope, $http);
 
   $scope.form = {};
   $scope.type = "Save";

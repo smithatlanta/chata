@@ -1,7 +1,6 @@
-function SearchChatSessionCtrl($scope, $location, $routeParams, $dialog, $rootScope, restService) {
-  setupLogin($scope, restService);
-  setupSearch($rootScope, $location);
-  checkCredentials($rootScope, restService);
+function SearchChatSessionCtrl($scope, $location, $routeParams, $modal, $http, $timeout, socket, authService, $rootScope, restService) {
+  setupGlobalFunctions(socket, $rootScope, $location);
+  checkCredentials(authService, $rootScope, $http);
 
   $scope.form = {};
   $scope.tableClass = 'expanded_table';
@@ -61,17 +60,20 @@ function SearchChatSessionCtrl($scope, $location, $routeParams, $dialog, $rootSc
     var msg = 'Are you sure you want to delete this session?';
     var btns = [{result:'no', label: 'No'}, {result:'yes', label: 'Yes', cssClass: 'btn-primary'}];
 
-    $dialog.messageBox(title, msg, btns)
-      .open()
-      .then(function(result){
-        if(result === 'yes'){
+    var modalInstance = $modal.open({
+        templateUrl: 'modalChatDel.html',
+        controller: ModalChatDelCtrl
+    });
+
+    modalInstance.result.then(function (choice) {
+      if(choice === 'yes'){
           restService.delete('/chatsession', id).then(function(data){
               search($scope, restService, layoutPlugin);
             }, function(status){
-              processError(status, $scope, $http);
+              processError(status, $scope);
             });
-        }
-      });
+      }
+    });
   };
 
   $scope.viewChatSession = function(id){
@@ -127,3 +129,12 @@ function search(scope, restService, layoutPlugin){
     });
 }
 
+var ModalChatDelCtrl = function ($scope, $modalInstance) {
+  $scope.yes = function () {
+    $modalInstance.close('yes');
+  };
+
+  $scope.no = function() {
+    $modalInstance.close('no');
+  };
+};

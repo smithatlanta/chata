@@ -1,7 +1,6 @@
-function EditAccountCtrl($scope, $location, $routeParams, $rootScope, restService, md5) {
-  setupLogin($scope, restService);
-  setupSearch($rootScope, $location);
-  checkCredentials($rootScope, restService);
+function EditAccountCtrl($scope, $location, $routeParams, $rootScope, $http, authService, socket, restService, md5) {
+  setupGlobalFunctions(socket, $rootScope, $location);
+  checkCredentials(authService, $rootScope, $http);
 
   $scope.hash = md5.createHash(localStorage.email.toLowerCase());
 

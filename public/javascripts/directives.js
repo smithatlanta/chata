@@ -4,68 +4,35 @@ angular.module('myApp.directives', ['md5']).
       elm.text(version);
     };
   }]).
-  // Resizing a div with AngularJS in a very rough way
   directive('resize', function ($window) {
     return function (scope, element) {
       scope.getWinHeight = function() {
         var heightDeduct;
 
+        // > 895
         if($window.innerWidth >= 885){
           scope.discussionTop = 'discuss114';
-
-          if(scope.isCollapsed === true){
-            heightDeduct = 160;
-          }
-          else
-          {
-            heightDeduct = 310;
-          }
+          heightDeduct = 160;
         }
 
         if($window.innerWidth >= 744 && $window.innerWidth < 885){
           scope.discussionTop = 'discuss135';
-          if(scope.isCollapsed === true){
-            heightDeduct = 181;
-          }
-          else
-          {
-            heightDeduct = 331;
-          }
+          heightDeduct = 181;
         }
 
         if($window.innerWidth >=  590 && $window.innerWidth < 744){
           scope.discussionTop = 'discuss156';
-          if(scope.isCollapsed === true){
-            heightDeduct = 202;
-          }
-          else
-          {
-            heightDeduct = 352;
-          }
+          heightDeduct = 202;
         }
 
-        // 506
         if($window.innerWidth >=  400 && $window.innerWidth < 590){
           scope.discussionTop = 'discuss177';
-          if(scope.isCollapsed === true){
-            heightDeduct = 223;
-          }
-          else
-          {
-            heightDeduct = 373;
-          }
+          heightDeduct = 223;
         }
 
-        // < 506
         if($window.innerWidth <  400){
           scope.discussionTop = 'discuss198';
-          if(scope.isCollapsed === true){
-            heightDeduct = 244;
-          }
-          else
-          {
-            heightDeduct = 394;
-          }
+          heightDeduct = 244;
         }
         
         setNavHeight($window.innerHeight - heightDeduct);
@@ -84,6 +51,7 @@ angular.module('myApp.directives', ['md5']).
       // Set on resize
       angular.element($window).bind('resize', function () {
         scope.$apply();
+        return false;
       });
     };
   }).
@@ -167,3 +135,118 @@ angular.module('myApp.directives', ['md5']).
         }
     };
   }]);
+//////Functions that need a better home
+function setupGlobalFunctions(socket, rootScope, location){
+  rootScope.prevreferrer = rootScope.referrer;
+  rootScope.referrer = location.url();
+
+  rootScope.updatectr = localStorage.updatectr;
+
+  if(rootScope.setup === undefined){
+    rootScope.$on('LocalStorageChanged', function(){
+        rootScope.updatectr = localStorage.updatectr;
+      });
+
+    rootScope.setup = true;
+
+    socket.addListener('refreshConversation', function(data){
+      rootScope.$broadcast('refreshConversation', data);
+    });
+
+    rootScope.loadMyQueue = function(){
+      location.url('searchChatSession');
+    };
+
+    rootScope.signOut = function(){
+      if(localStorage.password){
+        localStorage.removeItem("password");
+      }
+      if(localStorage.session){
+        localStorage.removeItem("session");
+      }
+      if(localStorage.name){
+        localStorage.removeItem("name");
+      }
+      if(localStorage.email){
+        localStorage.removeItem("email");
+      }
+      if(localStorage.id){
+        localStorage.removeItem("id");
+      }
+
+      rootScope.loggedIn = false;
+      rootScope.loggedInAdmin = false;
+
+      location.url('/');
+    };
+
+    rootScope.keypress = function(key){
+      location.url('searchChatSession?referrer=navbar&title=' + rootScope.title);
+      rootScope.title = "";
+    };
+  }
+}
+
+function checkCredentials(authService, rootScope, http){
+  /* authenticate */
+  authService.checkCreds().then(function(data){
+      rootScope.welcome = "Welcome: " + localStorage.name ;
+      rootScope.loggedInAdmin = data.show;
+      rootScope.loggedIn = true;
+      rootScope.id = data.id;
+    }, function(status){
+      rootScope.loggedInAdmin = false;
+      rootScope.loggedIn = false;
+      processError(status, rootScope);
+    });
+}
+
+function processError(status, $modal){
+  if(status === 401){
+    $modal.open({
+        templateUrl: 'modalLogin.html',
+        controller: ModalLoginInstCtrl
+    });
+  }
+  else
+  {
+    // need to log these somewhere since they were unexpected and pop up some friendly dialog to try again
+    console.log('An error occurred: ' + $status);
+  }
+}
+
+var ModalLoginInstCtrl = function ($scope, $modalInstance, $http, $location) {
+  $scope.close = function () {
+    $modalInstance.dismiss('cancel');
+  };
+
+  $scope.submitLogin = function () {
+    if($scope.form === undefined){
+      $scope.message = "Please enter a username and password";
+      return;
+    }
+
+    if($scope.form.password === undefined){
+      $scope.message = "Please enter a password";
+      return;
+    }
+
+    localStorage.clear();
+
+    localStorage.username = $scope.form.username;
+    localStorage.password = $scope.form.password;
+
+    $http.defaults.headers.post = {'Authorization' : localStorage.username + ":" + localStorage.password};
+
+    $http.post('/signin', $scope.form).
+      success(function(data, status, headers, config) {
+        localStorage.username = data.username;
+        localStorage.password = data.password;
+        localStorage.session = data.session;
+        $modalInstance.dismiss('cancel');
+      }).
+      error(function(data, status, headers, config){
+        $scope.message = "Incorrect username or password. Please try again.";
+      });
+  };
+};

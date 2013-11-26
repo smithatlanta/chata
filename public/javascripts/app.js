@@ -1,4 +1,4 @@
-angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.directives', 'btford.socket-io', 'ui.bootstrap.tpls', 'ui.bootstrap.buttons', 'ui.bootstrap.datepicker', 'ui.bootstrap.modal', 'ui.bootstrap.dialog', 'ui.bootstrap.dropdownToggle', 'ui.bootstrap.collapse', 'ui.bootstrap.timepicker', 'ngGrid', 'md5', 'ui.keypress']).
+angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.directives', 'btford.socket-io', 'ui.bootstrap', 'ngGrid', 'md5', 'ui.keypress']).
   config(['$routeProvider', '$locationProvider', '$rootScopeProvider', function($routeProvider, $locationProvider, $rootScopeProvider) {
     $routeProvider.
       when('/', {

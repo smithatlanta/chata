@@ -1,7 +1,6 @@
-function AccountMgmtCtrl($scope, $location, $dialog, $rootScope, restService) {
-  setupLogin($scope, restService);
-  setupSearch($rootScope, $location);
-  checkCredentials($rootScope, restService);
+function AccountMgmtCtrl($scope, $http, $location, $routeParams, $modal, $rootScope, authService, restService, socket) {
+  setupGlobalFunctions(socket, $rootScope, $location);
+  checkCredentials(authService, $rootScope, $http);
 
   var layoutPlugin = new ngGridLayoutPlugin();
   $scope.gridOptions = { data : 'myData',
@@ -23,7 +22,7 @@ function AccountMgmtCtrl($scope, $location, $dialog, $rootScope, restService) {
       $scope.myData = data;
       layoutPlugin.updateGridLayout();
     }, function(status){
-        processError(status, $scope, $http);
+        processError(status, $scope);
     });
 
   /* Events */
@@ -36,23 +35,36 @@ function AccountMgmtCtrl($scope, $location, $dialog, $rootScope, restService) {
     var msg = 'Are you sure you want to delete this user?';
     var btns = [{result:'no', label: 'No'}, {result:'yes', label: 'Yes', cssClass: 'btn-primary'}];
 
-    $dialog.messageBox(title, msg, btns)
-      .open()
-      .then(function(result){
-        if(result === 'yes'){
-          restService.delete('/account', id).then(function(data){
-              $scope.myData = [];
+    var modalInstance = $modal.open({
+        templateUrl: 'modalAccDel.html',
+        controller: ModalAccDelCtrl
+    });
 
-              restService.gets('/accounts').then(function(data){
-                  $scope.myData = data;
-                  layoutPlugin.updateGridLayout();
-                }, function(status){
-                    processError(status, $scope, $http);
-                });
-            }, function(status){
-              processError(status, $scope, $http);
-            });
-        }
-      });
+    modalInstance.result.then(function (choice) {
+      if(choice === 'yes'){
+        restService.delete('/account', id).then(function(data){
+            $scope.myData = [];
+
+            restService.gets('/accounts').then(function(data){
+                $scope.myData = data;
+                layoutPlugin.updateGridLayout();
+              }, function(status){
+                  processError(status, $scope);
+              });
+          }, function(status){
+            processError(status, $scope);
+          });
+      }
+    });
   };
 }
+
+var ModalAccDelCtrl = function ($scope, $modalInstance) {
+  $scope.yes = function () {
+    $modalInstance.close('yes');
+  };
+
+  $scope.no = function() {
+    $modalInstance.close('no');
+  };
+};

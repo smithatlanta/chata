@@ -1,20 +1,4 @@
 function IndexCtrl($scope, $location, $rootScope, restService) {
-  if(localStorage.password){
-    localStorage.removeItem("password");
-  }
-  if(localStorage.session){
-    localStorage.removeItem("session");
-  }
-  if(localStorage.name){
-    localStorage.removeItem("name");
-  }
-  if(localStorage.email){
-    localStorage.removeItem("email");
-  }
-  if(localStorage.id){
-    localStorage.removeItem("id");
-  }
-
   if(localStorage.username){
     $scope.form = {};
     $scope.form.username = localStorage.username;

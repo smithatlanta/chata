@@ -36,6 +36,8 @@ if (config.EnvConfig.environment === "prod")
     });
 }
 
+app.post('/auth', accountController.authenticate);
+
 app.get('/', chatController.index);
 app.post('/signin', accountController.authenticate);
 app.post('/account', accountController.addAccount);

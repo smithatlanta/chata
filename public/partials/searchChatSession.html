@@ -14,15 +14,15 @@
           <table>
           <tr>
           <td>
-          <input style="width:90px" type="text" datepicker-popup="MM/dd/yyyy" ng-model="form.addedstart" open="openedstart" min="minDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)"/>
-          <button class="btn" ng-click="openstart()"><i class="icon-calendar"></i></button> 
+            <input style="width:90px" type="text" datepicker-popup="MM/dd/yyyy" show-weeks=false year-format="'yy'" starting-day="1" ng-model="form.addedstart" is-open="openedstart" min="minDate" date-disabled="disabled(date, mode)"/>
+            <button class="btn" ng-click="openstart()"><i class="icon-calendar"></i></button> 
           </td>
           <td style="padding-left:10px;padding-right:10px;vertical-align:bottom">
-          <label>And</label>
+            <label>And</label>
           </td>
           <td>
-          <input style="width:90px" type="text" datepicker-popup="MM/dd/yyyy" ng-model="form.addedend" open="openedend" min="minDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)"/>
-          <button class="btn" ng-click="openend()"><i class="icon-calendar"></i></button> 
+              <input style="width:90px" type="text" datepicker-popup="MM/dd/yyyy" show-weeks=false year-format="'yy'" starting-day="1" ng-model="form.addedend" is-open="openedend" min="minDate" date-disabled="disabled(date, mode)"/>
+              <button class="btn" ng-click="openend()"><i class="icon-calendar"></i></button> 
           </td>
           </tr>
           </table>
@@ -58,3 +58,28 @@
     </div>
   </div>
 </div>
+<script type='text/ng-template' id='modalChatDel.html'>
+  <div class='modal-header'>
+    <h3> Delete Chat Session
+    </h3>
+  </div>
+  <div class="modal-body">
+    <p>
+      <label>Are you sure you want to delete this Chat Session? </label>
+    </p>
+  </div>
+  <div class="modal-footer">
+    <p>
+      <table>
+        <tr>
+          <td>
+            <button class="btn" type='button' ng-click='no()'> No
+            </button>
+            <button class="btn" type='button' ng-click='yes()'> Yes
+            </button>              
+          </td>
+        </tr>
+      </table>
+    </p>
+  </div>
+</script> 

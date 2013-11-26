@@ -1,6 +1,6 @@
-function AddAccountCtrl($scope, $location, $rootScope, restService) {
-  setupLogin($scope, restService);
-  setupSearch($rootScope, $location);
+function AddAccountCtrl($scope, $location, $rootScope, $http, socket, authService, restService) {
+  setupGlobalFunctions(socket, $rootScope, $location);
+  checkCredentials(authService, $rootScope, $http);
 
   $scope.form = {};
   $scope.header = "Add Account";

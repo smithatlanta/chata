@@ -1,5 +1,19 @@
 angular.module('myApp.services', []).
   service('authService', ['$http', '$q', function($http, $q){
+    this.checkCreds = function() {
+      var deferred = $q.defer();
+
+      $http.defaults.headers.post = {'Authorization' : localStorage.username + ":" + localStorage.password + ":" + localStorage.session };
+      $http.post('/auth').
+        success(function(data, status, headers, config) {
+          deferred.resolve(data);
+        }).
+        error(function(data, status, headers, config) {
+          deferred.reject(status);
+        });
+
+      return deferred.promise;
+    };
     this.resetPassword = function(username) {
       var deferred = $q.defer();
 
